@@ -4,8 +4,6 @@ package:
 source:
   path: .
 build:
-  no_link:
-    - rocblas/*
   missing_dso_whitelist:
     - $RPATH/librt.so.1
     - $RPATH/libdl.so.2
