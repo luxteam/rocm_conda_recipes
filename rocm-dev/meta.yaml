@@ -1,0 +1,43 @@
+package:
+  name: rocm-dev
+  version: 5.1.0
+source:
+  path: .
+build:
+  missing_dso_whitelist:
+    - $RPATH/libc.so.6
+    - $RPATH/libdl.so.2
+    - $RPATH/libpthread.so.0
+    - $RPATH/libm.so.6
+    - $RPATH/libtinfo.so.5
+    - $RPATH/librt.so.1
+    - $RPATH/libelf.so.1
+    - $RPATH/libnuma.so.1
+    - $RPATH/libdw.so.1
+    - $RPATH/libncurses.so.5
+    - $RPATH/libpython3.8.so.1.0
+    - $RPATH/libexpat.so.1
+    - $RPATH/libbabeltrace.so.1
+    - $RPATH/libgmp.so.10
+    - $RPATH/libdrm.so.2
+    - $RPATH/libdrm_amdgpu.so.1
+    - $RPATH/libflangrti.so
+    - $RPATH/librocprofiler64.so.1
+    - $RPATH/libbabeltrace-ctf.so.1
+    - /lib64/ld-linux-x86-64.so.2
+    - /lib/ld-linux.so.2
+  script: |
+    python build.py --rocmrelease=5.1.0
+requirements:
+  build:
+    - python
+    - libstdcxx-ng
+    - libgcc-ng
+    - libffi
+    - xz
+    - zlib
+    - ld_impl_linux-64
+  run:
+    - python
+    - libstdcxx-ng
+    - libgcc-ng
