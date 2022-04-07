@@ -1,4 +1,2 @@
-which rocminfo
-which clinfo
 rocminfo
-clinfo
+which rocminfo
