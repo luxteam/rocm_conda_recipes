@@ -4,7 +4,6 @@ BUILD_DIR=${2:-../build_logs}
 
 export DEBIAN_FRONTEND=noninteractive
 
-conda activate
 pwd
 conda build $PACKAGE_NAME 2>&1 | tee $BUILD_DIR/$PACKAGE_NAME\_$(date +"%I:%M_%d%m%Y").log
 
