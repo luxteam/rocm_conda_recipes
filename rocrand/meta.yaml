@@ -1,0 +1,18 @@
+package:
+  name: rocrand
+  version: 5.1.0
+source:
+  path: .
+build:
+  script: |
+    python build.py --rocmrelease=5.1.0
+requirements:
+  build:
+    - python
+    - libstdcxx-ng
+    - libgcc-ng
+    - zlib
+  run:
+    - python
+    - libstdcxx-ng
+    - libgcc-ng
