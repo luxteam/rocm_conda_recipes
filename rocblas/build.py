@@ -15,10 +15,10 @@ def install_rocblas(args):
         ]
     check_call(cmd)
     cmd = [
-            "sudo"
+            "sudo",
             "dpkg",
             "-i",
-            "--force-depends"
+            "--force-depends",
             "rocblas5.1.0_2.43.0.50100-36_amd64.deb"
         ]
     output = check_output(cmd)
