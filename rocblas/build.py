@@ -50,7 +50,7 @@ def main():
     parser = make_parser()
     args = parser.parse_args()
     install_rocblas(args)
-    # copy(args)
+    copy(args)
     uninstall_rocblas(args)
 
 
