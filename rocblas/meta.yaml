@@ -15,6 +15,7 @@ build:
     - $RPATH/libdrm.so.2
     - $RPATH/libdrm_amdgpu.so.1
     - $RPATH/libnuma.so.1
+    - $RPATH/libamdhip64.so.5
     - /lib64/ld-linux-x86-64.so.2
   script: |
     python build.py --rocmrelease=5.1.0
