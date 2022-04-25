@@ -47,7 +47,7 @@ def remove_zip(args):
     cmd = [
             "sudo",
             "rm",
-            "/opt/rocm-{}/rocblas/lib/library/library.zip".format(args.rocmrelease)
+            "/opt/rocm-{}/rocblas/lib/library/hiplibrary.zip".format(args.rocmrelease)
         ]
     check_call(cmd)
 
