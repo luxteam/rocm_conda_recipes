@@ -1,0 +1,125 @@
+{% set version = "1.0.0" %}
+
+package:
+  name: pytorch
+  version: {{ version }}
+source:
+  # git_url: https://github.com/ROCmSoftwarePlatform/pytorch.git
+  path: /home/georgiy/Desktop/Viacheslav/pytorch-source
+build:
+  number: 0
+  script_env:
+    - CFLAGS
+    - CMAKE_PREFIX_PATH
+    - HIP_PATH
+    - ROCM_PATH
+    - ROCM_SOURCE_DIR
+    - DEBUG
+    - REL_WITH_DEB_INFO
+    - MAX_JOBS
+    - USE_CUDA
+    - USE_ROCM
+    - CFLAGS
+    - CC
+    - USE_CUDNN
+    - USE_FBGEMM
+    - USE_KINETO
+    - USE_NINJA
+    - USE_NUMPY
+    - BUILD_TEST
+    - USE_MKLDNN
+    - USE_MKLDNN_ACL
+    - MKLDNN_CPU_RUNTIME
+    - USE_STATIC_MKL
+    - USE_NNPACK
+    - USE_QNNPACK
+    - USE_DISTRIBUTED
+    - USE_TENSORPIPE
+    - USE_GLOO
+    - USE_MPI
+    - USE_SYSTEM_NCCL
+    - BUILD_CAFFE2_OPS
+    - BUILD_CAFFE2
+    - USE_IBVERBS
+    - USE_OPENCV
+    - USE_OPENMP
+    - USE_FFMPEG
+    - USE_LEVELDB
+    - USE_LMDB
+    - BUILD_BINARY
+    - ATEN_AVX512_256
+    - PYTORCH_BUILD_VERSION
+    - PYTORCH_BUILD_NUMBER
+    - TORCH_CUDA_ARCH_LIST
+    - PYTORCH_ROCM_ARCH
+    - ONNX_NAMESPACE
+    - BLAS
+    - MKL_THREADING
+    - USE_REDIS
+    - USE_ZSTD
+    - CUDA_HOME
+    - CUDA_PATH
+    - CUDAHOSTCXX
+    - CUDA_NVCC_EXECUTABLE
+    - CUDNN_LIB_DIR
+    - CUDNN_INCLUDE_DIR
+    - CUDNN_LIBRARY
+    - MIOPEN_LIB_DIR
+    - MIOPEN_INCLUDE_DIR
+    - MIOPEN_LIBRARY
+    - NCCL_ROOT
+    - NCCL_LIB_DIR
+    - NCCL_INCLUDE_DIR
+    - NVTOOLSEXT_PATH
+    - ACL_ROOT_DIR
+    - LIBRARY_PATH
+    - LD_LIBRARY_PATH
+    - ATEN_THREADING
+    - USE_TBB
+    - USE_SYSTEM_TBB
+    - USE_SYSTEM_LIBS
+    - USE_SYSTEM_CPUINFO
+    - USE_SYSTEM_SLEEF
+    - BUILD_CUSTOM_PROTOBUF
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
+    - git
+    - patch
+    - zlib
+    - astunparse
+    - numpy
+    - ninja
+    - pyyaml
+    - mkl
+    - mkl-include
+    - setuptools
+    - cmake
+    - cffi
+    - typing_extensions
+    - future
+    - six
+    - requests
+    - dataclasses
+    - rocm-hip-sdk
+    - rocm-ml-libraries
+
+  run:
+    - python
+    - numpy
+    - cffi
+    - protobuf
+    - tabulate
+    - future
+    - pillow
+    - typing_extensions
+    - networkx
+    - scipy
+    - lmdb
+    - leveldb
+    - pyyaml
+    - libgfortran-ng
+    - rocm-hip-runtime
+    - rocm-ml-libraries

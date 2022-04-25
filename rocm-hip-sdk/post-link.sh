@@ -1,2 +1,2 @@
-unzip $PREFIX/rocblas/lib/library/library.zip -d $PREFIX/rocblas/lib/library
-rm $PREFIX/rocblas/lib/library/library.zip
+unzip -u $PREFIX/rocblas/lib/library/hiplibrary.zip -d $PREFIX/rocblas/lib/library
+rm $PREFIX/rocblas/lib/library/hiplibrary.zip

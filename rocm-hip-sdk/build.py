@@ -29,7 +29,8 @@ def archive_rocblas_binaries(args):
         "sudo",
         "zip",
         "-rj",
-        "/opt/rocm-{}/rocblas/lib/library/library.zip".format(args.rocmrelease),
+        # TODO: fix zip duct tape by making separate rocblas dependency
+        "/opt/rocm-{}/rocblas/lib/library/hiplibrary.zip".format(args.rocmrelease),
         "/opt/rocm-{}/rocblas/lib/library".format(args.rocmrelease),
     ]
     check_call(cmd)
