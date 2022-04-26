@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from argparse import ArgumentParser
 from subprocess import check_output, check_call
 import shutil
@@ -23,6 +24,22 @@ rocblas_files_to_delete = [
     'TensileLibrary_gfx90a.co',
 ]
 
+files_to_patch = [
+    {
+        'file': os.path.join('hipfft', 'lib', 'cmake', 'hipfft', 'hipfft-targets.cmake'),
+        'changes': [('/opt/rocm-5.1.0', '${_IMPORT_PREFIX}')]
+    },
+]
+
+
+def patch_files():
+    for info in files_to_patch:
+        p = Path(os.environ['PREFIX'], info['file']).resolve()
+        filedata = p.read_text()
+        for change in info['changes']:
+            filedata = filedata.replace(change[0], change[1])
+        p.write_text(filedata)
+        
 
 def archive_rocblas_binaries(args):
     cmd = [
@@ -96,6 +113,7 @@ def main():
     archive_rocblas_binaries(args)
     copy(args)
     remove_zip(args)
+    patch_files()
     uninstall_rocm(args)
 
 
