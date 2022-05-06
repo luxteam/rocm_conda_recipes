@@ -28,6 +28,13 @@ build:
     - /lib/ld-linux.so.2
   script: |
     python build.py --rocmrelease=5.1.0
+test:
+  files:
+    - src/test_hip.cpp
+    - run-hip.sh
+  commands:
+    - rocminfo
+    - bash run-hip.sh
 requirements:
   build:
     - python
