@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c5c1aeb0b6..a0abcad320 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+ #cmake_policy(SET CMP0022 NEW)
+ #cmake_policy(SET CMP0023 NEW)
+ 
++set(ROCM_SOURCE_DIR "$ENV{BUILD_PREFIX}" CACHE STRING "ROCm source dir" FORCE)
++mark_as_advanced(ROCM_SOURCE_DIR)
++
+ if(CMAKE_GENERATOR STREQUAL "Ninja" AND CMAKE_VERSION VERSION_LESS 3.13)
+   message(FATAL_ERROR "Using the Ninja generator requires CMake version 3.13 or greater")
+ endif()

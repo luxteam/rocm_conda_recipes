@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 set -ex
 
-export CMAKE_PREFIX_PATH=$PREFIX
-export HIP_PATH=$PREFIX/hip
-export ROCM_PATH=$PREFIX
-export ROCM_SOURCE_DIR=$PREFIX
-export CFLAGS+=-I$PREFIX/roctracer/include
-export USE_NINJA=OFF
-export USE_ROCM=ON
+export CMAKE_PREFIX_PATH=$BUILD_PREFIX
+export HIP_PATH=$BUILD_PREFIX/hip
+export ROCM_PATH=$BUILD_PREFIX
+export ROCM_SOURCE_DIR=$BUILD_PREFIX
+export USE_NINJA=0
 
 rm -rf build
-python tools/amd_build/build_amd.py
-python setup.py install
+python3 tools/amd_build/build_amd.py
+python3 setup.py install
