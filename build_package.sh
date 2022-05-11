@@ -6,5 +6,5 @@ export DEBIAN_FRONTEND=noninteractive
 
 mkdir -p $BUILD_DIR
 pwd
-conda build --debug $PACKAGE_NAME 2>&1 | tee $BUILD_DIR/$PACKAGE_NAME\_$(date +"%I:%M_%d%m%Y").log
+conda build --debug -c defaults -c conda-forge $PACKAGE_NAME 2>&1 | tee $BUILD_DIR/$PACKAGE_NAME\_$(date +"%m%d%Y_%I:%M").log
 
