@@ -7,7 +7,7 @@ import shutil
 files_to_patch = [
     {
         'file': os.path.join('bin', 'clang-ocl'),
-        'changes': [('/opt/rocm-5.1.0', '$CONDA_PREFIX')]
+        'changes': [('/opt/rocm-{version}', '$CONDA_PREFIX')]
     },
     {
         'file': os.path.join('bin', 'roc-obj-extract'),
@@ -20,12 +20,12 @@ files_to_patch = [
 ]
 
 
-def patch_files():
+def patch_files(args):
     for info in files_to_patch:
         p = Path(os.environ['PREFIX'], info['file']).resolve()
         filedata = p.read_text()
         for change in info['changes']:
-            filedata = filedata.replace(change[0], change[1])
+            filedata = filedata.replace(change[0].format(version=args.rocmrelease), change[1])
         p.write_text(filedata)
 
 def copy(args):
@@ -69,7 +69,7 @@ def main():
     args = parser.parse_args()
     install_rocm(args)
     copy(args)
-    patch_files()
+    patch_files(args)
     uninstall_rocm(args)
 
 

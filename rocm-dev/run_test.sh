@@ -1,2 +1,0 @@
-rocminfo
-which rocminfo

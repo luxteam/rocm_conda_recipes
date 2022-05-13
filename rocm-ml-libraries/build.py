@@ -28,17 +28,17 @@ rocblas_files_to_delete = [
 files_to_patch = [
     {
         'file': os.path.join('hipfft', 'lib', 'cmake', 'hipfft', 'hipfft-targets.cmake'),
-        'changes': [('/opt/rocm-5.1.0', '${_IMPORT_PREFIX}')]
+        'changes': [('/opt/rocm-{version}', '${_IMPORT_PREFIX}')]
     },
 ]
 
 
-def patch_files():
+def patch_files(args):
     for info in files_to_patch:
         p = Path(os.environ['PREFIX'], info['file']).resolve()
         filedata = p.read_text()
         for change in info['changes']:
-            filedata = filedata.replace(change[0], change[1])
+            filedata = filedata.replace(change[0].format(args.rocmrelease), change[1])
         p.write_text(filedata)
 
 
@@ -114,7 +114,7 @@ def main():
     archive_rocblas_binaries(args)
     copy(args)
     remove_zip(args)
-    patch_files()
+    patch_files(args)
     uninstall_rocm(args)
 
 

@@ -1,6 +1,7 @@
+{% set version = environ.get('CONDA_ROCM_VERSION', '5.1.0') %}
 package:
   name: rocm-hip-sdk
-  version: 5.1.0
+  version: {{ version }}
 source:
   path: .
 build:
@@ -17,14 +18,19 @@ build:
     - $RPATH/libnuma.so.1
     - /lib64/ld-linux-x86-64.so.2
   script: |
-    python build.py --rocmrelease=5.1.0
+    python build.py --rocmrelease={{ version }}
+test:
+  requires:
+    - rocm-dev
+  files:
+    - test
 requirements:
   build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
     - python
-    - libstdcxx-ng
-    - libgcc-ng
     - zlib
   run:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
     - python
-    - libstdcxx-ng
-    - libgcc-ng

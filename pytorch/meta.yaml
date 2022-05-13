@@ -5,7 +5,6 @@ package:
   version: {{ version }}
 source:
   git_url: https://github.com/ROCmSoftwarePlatform/pytorch.git
-  # path: /home/georgiy/Desktop/Viacheslav/pytorch-source
   patches:
     - set-rocm_source_dir.patch
 build:
@@ -28,7 +27,11 @@ build:
     - $RPATH/libc10_hip.so
     - $RPATH/libjitbackend_test.so
     - $RPATH/libbackend_with_compiler.so
-    
+test:
+  files:
+    - test
+  imports:
+    - torch
 requirements:
   build:
     - libgcc-ng
