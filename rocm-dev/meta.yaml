@@ -44,12 +44,12 @@ test:
 requirements:
   build:
     - python
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
+    - libstdcxx-ng
+    - libgcc-ng
     - xz
     - zlib
     - ld_impl_linux-64
   run:
     - python
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
+    - libstdcxx-ng
+    - libgcc-ng
