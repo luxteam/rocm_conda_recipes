@@ -29,11 +29,11 @@ test:
     - bash run-hip.sh
 requirements:
   build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
+    - libstdcxx-ng
+    - libgcc-ng
     - python
     - zlib
   run:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
+    - libstdcxx-ng
+    - libgcc-ng
     - python
