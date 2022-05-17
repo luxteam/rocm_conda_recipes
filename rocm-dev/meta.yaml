@@ -6,6 +6,7 @@ source:
   path: .
 build:
   missing_dso_whitelist:
+    - $RPATH/ld-linux.so.2
     - $RPATH/libc.so.6
     - $RPATH/libdl.so.2
     - $RPATH/libpthread.so.0
@@ -25,6 +26,10 @@ build:
     - $RPATH/libflangrti.so
     - $RPATH/librocprofiler64.so.1
     - $RPATH/libbabeltrace-ctf.so.1
+    - $RPATH/liblzma.so.5
+    - $RPATH/libz.so.1
+    - x86_64-conda-linux-gnu/sysroot/lib/libpthread.so.0
+    - x86_64-conda-linux-gnu/sysroot/lib/libc.so.6
     - /lib64/ld-linux-x86-64.so.2
     - /lib/ld-linux.so.2
   script: |
