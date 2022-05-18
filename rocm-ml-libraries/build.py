@@ -38,7 +38,7 @@ def patch_files(args):
         p = Path(os.environ['PREFIX'], info['file']).resolve()
         filedata = p.read_text()
         for change in info['changes']:
-            filedata = filedata.replace(change[0].format(args.rocmrelease), change[1])
+            filedata = filedata.replace(change[0].format(version=args.rocmrelease), change[1])
         p.write_text(filedata)
 
 
