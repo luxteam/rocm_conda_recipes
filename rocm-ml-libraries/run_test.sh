@@ -7,6 +7,6 @@ bash run-rocblas2.sh
 bash run-rocfft.sh
 bash run-rocrand.sh
 bash run-rocsparse.sh
-bash run-opencl.sh
-bash run-opencl2.sh
-bash run-opencl3.sh
+# bash run-opencl.sh
+# bash run-opencl2.sh
+# bash run-opencl3.sh
