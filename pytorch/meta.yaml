@@ -34,6 +34,8 @@ test:
     - torch
 requirements:
   build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
     - libgcc-ng
     - libstdcxx-ng
     - libstdcxx-devel_linux-64
@@ -49,6 +51,7 @@ requirements:
     - mkl-include
     - setuptools
     - cmake
+    - make
     - cffi
     - typing_extensions
     - future
@@ -64,6 +67,8 @@ requirements:
     - rocm-ml-libraries
 
   run:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
     - _openmp_mutex
     - python
     - numpy
