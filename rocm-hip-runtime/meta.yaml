@@ -37,6 +37,7 @@ requirements:
     - libstdcxx-ng
     - libgcc-ng
     - python
+    - rocm-llvm
 outputs:
   - name: rocm-llvm
     files:
