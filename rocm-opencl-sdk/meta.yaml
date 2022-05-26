@@ -34,3 +34,11 @@ requirements:
     - libstdcxx-ng
     - libgcc-ng
     - python
+outputs:
+  - name: rocm-llvm
+    files:
+      - llvm
+      - share/doc/rocm-llvm
+      - bin/amdclang*
+      - bin/amdflang
+      - bin/amdlld

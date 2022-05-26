@@ -34,3 +34,17 @@ requirements:
     - libstdcxx-ng
     - libgcc-ng
     - python
+outputs:
+  - name: rocblas
+    files:
+      - rocblas
+      - share/doc/rocblas
+      - lib/library
+      - lib/librocblas*
+  - name: rocm-llvm
+    files:
+      - llvm
+      - share/doc/rocm-llvm
+      - bin/amdclang*
+      - bin/amdflang
+      - bin/amdlld
