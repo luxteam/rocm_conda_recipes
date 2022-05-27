@@ -3,6 +3,7 @@ from pathlib import Path
 from argparse import ArgumentParser
 from subprocess import check_call, check_output
 import shutil
+import glob
 
 files_to_patch = [
     {
@@ -19,6 +20,13 @@ files_to_patch = [
     }
 ]
 
+extra_files = [
+    'llvm',
+    'share/doc/rocm-llvm',
+    'bin/amdclang*',
+    'bin/amdflang',
+    'bin/amdlld'
+]
 
 def patch_files(args):
     for info in files_to_patch:
@@ -29,7 +37,14 @@ def patch_files(args):
         p.write_text(filedata)
 
 def copy(args):
-    shutil.copytree(f'/opt/rocm-{args.rocmrelease}/', os.environ['PREFIX'], symlinks=True, dirs_exist_ok=True)
+    rocm_path = f'/opt/rocm-{args.rocmrelease}'
+    for ef in extra_files:
+        for filename in glob.glob(os.path.join(rocm_path, ef)):
+            if os.path.isdir(filename):
+                os.rmdir(filename)
+            else:
+                os.remove(filename)
+    shutil.copytree(rocm_path, os.environ['PREFIX'], symlinks=True, dirs_exist_ok=True)
 
 def install_rocm(args):
     cmd = [
