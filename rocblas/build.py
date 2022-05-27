@@ -2,6 +2,7 @@ import os
 from argparse import ArgumentParser
 from subprocess import check_output, check_call
 import shutil
+import glob
 
 files_to_delete = [
     'Kernels.so-000-gfx1010.hsaco',
@@ -54,12 +55,13 @@ def install_rocblas(args):
             "rocblas{}".format(args.rocmrelease),
         ]
     check_call(cmd)
+    deb_pkg_name = glob.glob("rocblas{}*.deb".format(args.rocmrelease))[0]
     cmd = [
             "sudo",
             "dpkg",
             "-i",
             "--force-depends",
-            "rocblas{}*.deb".format(args.rocmrelease)
+            deb_pkg_name
         ]
     output = check_output(cmd)
     with open('rocblas_install.log', 'w') as f:

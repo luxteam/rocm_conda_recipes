@@ -2,6 +2,7 @@ import os
 from argparse import ArgumentParser
 from subprocess import check_output, check_call
 import shutil
+import glob
 
 def copy(args):
     shutil.copytree(f'/opt/rocm-{args.rocmrelease}/', os.environ['PREFIX'], symlinks=True, dirs_exist_ok=True)
@@ -14,12 +15,13 @@ def install_rocmllvm(args):
             "rocm-llvm{}".format(args.rocmrelease),
         ]
     check_call(cmd)
+    deb_pkg_name = glob.glob("rocm-llvm{}*.deb".format(args.rocmrelease))[0]
     cmd = [
             "sudo",
             "dpkg",
             "-i",
             "--force-depends",
-            "rocm-llvm{}*.deb".format(args.rocmrelease)
+            deb_pkg_name
         ]
     output = check_output(cmd)
     with open('rocmllvm_install.log', 'w') as f:
