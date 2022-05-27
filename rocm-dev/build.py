@@ -28,6 +28,9 @@ extra_files = [
     'bin/amdlld'
 ]
 
+def delete_file(path):
+    print(check_output("sudo rm -rf {}".format(path)))
+    
 def patch_files(args):
     for info in files_to_patch:
         p = Path(os.environ['PREFIX'], info['file']).resolve()
@@ -39,11 +42,8 @@ def patch_files(args):
 def copy(args):
     rocm_path = f'/opt/rocm-{args.rocmrelease}'
     for ef in extra_files:
-        for filename in glob.glob(os.path.join(rocm_path, ef)):
-            if os.path.isdir(filename):
-                os.rmdir(filename)
-            else:
-                os.remove(filename)
+        for path in glob.glob(os.path.join(rocm_path, ef)):
+            delete_file(path)
     shutil.copytree(rocm_path, os.environ['PREFIX'], symlinks=True, dirs_exist_ok=True)
 
 def install_rocm(args):
