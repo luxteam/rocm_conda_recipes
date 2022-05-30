@@ -59,7 +59,7 @@ def uninstall_rocm(args):
         print('Error during ROCm uninstallation. Trying one more time')
         output += check_output(cmd).decode()
     with open('rocm_uninstall.log', 'w') as f:
-        f.write(output.decode())
+        f.write(output)
         
 
 def make_parser():
