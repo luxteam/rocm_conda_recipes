@@ -1,8 +1,9 @@
 import os
 from pathlib import Path
 from argparse import ArgumentParser
-from subprocess import check_output, check_call
+from subprocess import check_output
 import shutil
+import glob
 
 
 files_to_patch = [
@@ -12,6 +13,29 @@ files_to_patch = [
     },
 ]
 
+extra_files = [
+    'llvm',
+    'rocblas',
+    'share/doc/rocm-llvm',
+    'share/doc/rocblas'
+    'bin/amdclang*',
+    'bin/amdflang',
+    'bin/amdlld',
+    'lib/librocblas.so*',
+    'lib/library/Kernels.so*',
+    'lib/library/Tensile*'
+]
+
+
+def delete_file(path):
+    cmd = [
+            "sudo",
+            "rm",
+            "-rf",
+            "{}".format(path)
+        ]
+    print(check_output(cmd))
+    
 
 def patch_files(args):
     for info in files_to_patch:
@@ -23,7 +47,11 @@ def patch_files(args):
 
 
 def copy(args):
-    shutil.copytree(f'/opt/rocm-{args.rocmrelease}/', os.environ['PREFIX'], symlinks=True, dirs_exist_ok=True)
+    rocm_path = f'/opt/rocm-{args.rocmrelease}'
+    for ef in extra_files:
+        for path in glob.glob(os.path.join(rocm_path, ef)):
+            delete_file(path)
+    shutil.copytree(rocm_path, os.environ['PREFIX'], symlinks=True, dirs_exist_ok=True)
 
 
 def install_rocm(args):
@@ -41,15 +69,20 @@ def install_rocm(args):
         
 
 def uninstall_rocm(args):
+    output = ""
     cmd = [
             "sudo",
             "amdgpu-uninstall",
             "-y",
             "--rocmrelease={}".format(args.rocmrelease),
         ]
-    output = check_output(cmd)
+    try:
+        output = check_output(cmd).decode()
+    except:
+        print('Error during ROCm uninstallation. Trying one more time')
+        output += check_output(cmd).decode()
     with open('rocm_uninstall.log', 'w') as f:
-        f.write(output.decode())
+        f.write(output)
         
         
 def make_parser():
