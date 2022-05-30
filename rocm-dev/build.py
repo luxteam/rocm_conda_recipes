@@ -29,7 +29,13 @@ extra_files = [
 ]
 
 def delete_file(path):
-    print(check_output("sudo rm -rf {}".format(path)))
+    cmd = [
+            "sudo",
+            "rm",
+            "-rf",
+            "{}".format(path)
+        ]
+    print(check_output(cmd))
     
 def patch_files(args):
     for info in files_to_patch:
@@ -67,7 +73,11 @@ def uninstall_rocm(args):
             "-y",
             "--rocmrelease={}".format(args.rocmrelease),
         ]
-    output = check_output(cmd)
+    try:
+        output = check_output(cmd)
+    except:
+        print('Error during ROCm uninstallation. Trying one more time')
+        output += check_output(cmd)
     with open('rocm_uninstall.log', 'w') as f:
         f.write(output.decode())
         
