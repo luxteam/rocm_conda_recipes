@@ -67,6 +67,7 @@ def install_rocm(args):
         
 
 def uninstall_rocm(args):
+    output = ""
     cmd = [
             "sudo",
             "amdgpu-uninstall",
@@ -74,10 +75,10 @@ def uninstall_rocm(args):
             "--rocmrelease={}".format(args.rocmrelease),
         ]
     try:
-        output = check_output(cmd)
+        output = check_output(cmd).decode()
     except:
         print('Error during ROCm uninstallation. Trying one more time')
-        output += check_output(cmd)
+        output += check_output(cmd).decode()
     with open('rocm_uninstall.log', 'w') as f:
         f.write(output.decode())
         
