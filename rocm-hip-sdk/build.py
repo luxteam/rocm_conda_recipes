@@ -14,13 +14,14 @@ files_to_patch = [
 
 extra_files = [
     'llvm',
-    'rocblas',
+    'rocblas/lib/library',
+    'rocblas/lib/librocblas.so.0*',
     'share/doc/rocm-llvm',
     'share/doc/rocblas'
     'bin/amdclang*',
     'bin/amdflang',
     'bin/amdlld',
-    'lib/librocblas.so*',
+    'lib/librocblas.so.0*',
     'lib/library/Kernels.so*',
     'lib/library/Tensile*'
 ]
