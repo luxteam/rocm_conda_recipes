@@ -53,3 +53,4 @@ requirements:
     - python
     - libstdcxx-ng
     - libgcc-ng
+    - rocm-llvm

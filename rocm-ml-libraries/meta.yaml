@@ -34,3 +34,5 @@ requirements:
     - libstdcxx-ng
     - libgcc-ng
     - python
+    - rocblas
+    - rocm-llvm

@@ -1,0 +1,19 @@
+{% set version = environ.get('CONDA_ROCM_VERSION', '5.1.0') %}
+package:
+  name: rocm-llvm
+  version: {{ version }}
+source:
+  path: .
+build:
+  script: |
+    python build.py --rocmrelease={{ version }}
+requirements:
+  build:
+    - python
+    - libstdcxx-ng
+    - libgcc-ng
+    - zlib
+  run:
+    - python
+    - libstdcxx-ng
+    - libgcc-ng

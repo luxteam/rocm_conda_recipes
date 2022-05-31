@@ -1,6 +1,6 @@
 {% set version = environ.get('CONDA_ROCM_VERSION', '5.1.0') %}
 package:
-  name: rocm-opencl-runtime
+  name: rocblas
   version: {{ version }}
 source:
   path: .
@@ -16,20 +16,18 @@ build:
     - $RPATH/libdrm.so.2
     - $RPATH/libdrm_amdgpu.so.1
     - $RPATH/libnuma.so.1
+    - $RPATH/libamdhip64.so.5
     - /lib64/ld-linux-x86-64.so.2
   script: |
     python build.py --rocmrelease={{ version }}
 requirements:
   build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
+    - python
     - libstdcxx-ng
     - libgcc-ng
-    - python
     - zlib
   run:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
+    - python
     - libstdcxx-ng
     - libgcc-ng
-    - python
+    - rocm-llvm

@@ -1,29 +1,10 @@
 import os
 from pathlib import Path
 from argparse import ArgumentParser
-from subprocess import check_output, check_call
+from subprocess import check_output
 import shutil
+import glob
 
-
-rocblas_files_to_delete = [
-    'Kernels.so-000-gfx1010.hsaco',
-    'Kernels.so-000-gfx1011.hsaco',
-    'Kernels.so-000-gfx1012.hsaco',
-    'Kernels.so-000-gfx1030.hsaco',
-    'Kernels.so-000-gfx803.hsaco',
-    'Kernels.so-000-gfx900.hsaco',
-    'Kernels.so-000-gfx906-xnack-.hsaco',
-    'Kernels.so-000-gfx908-xnack-.hsaco',
-    'Kernels.so-000-gfx90a-xnack+.hsaco',
-    'Kernels.so-000-gfx90a-xnack-.hsaco',
-    'TensileLibrary.dat',
-    'TensileLibrary_gfx1030.co',
-    'TensileLibrary_gfx803.co',
-    'TensileLibrary_gfx900.co',
-    'TensileLibrary_gfx906.co',
-    'TensileLibrary_gfx908.co',
-    'TensileLibrary_gfx90a.co',
-]
 
 files_to_patch = [
     {
@@ -32,6 +13,30 @@ files_to_patch = [
     },
 ]
 
+extra_files = [
+    'llvm',
+    'rocblas/lib/library',
+    'rocblas/lib/librocblas.so.0*',
+    'share/doc/rocm-llvm',
+    'share/doc/rocblas'
+    'bin/amdclang*',
+    'bin/amdflang',
+    'bin/amdlld',
+    'lib/librocblas.so.0*',
+    'lib/library/Kernels.so*',
+    'lib/library/Tensile*'
+]
+
+
+def delete_file(path):
+    cmd = [
+            "sudo",
+            "rm",
+            "-rf",
+            "{}".format(path)
+        ]
+    print(check_output(cmd))
+    
 
 def patch_files(args):
     for info in files_to_patch:
@@ -42,36 +47,12 @@ def patch_files(args):
         p.write_text(filedata)
 
 
-def archive_rocblas_binaries(args):
-    cmd = [
-        "sudo",
-        "zip",
-        "-rj",
-        # TODO: fix zip duct tape by making separate rocblas dependency
-        "/opt/rocm-{}/rocblas/lib/library/mllibrary.zip".format(args.rocmrelease),
-        "/opt/rocm-{}/rocblas/lib/library".format(args.rocmrelease),
-    ]
-    check_call(cmd)
-    for ftd in rocblas_files_to_delete:
-        cmd = [
-            "sudo",
-            "rm",
-            "/opt/rocm-{}/rocblas/lib/library/{}".format(args.rocmrelease, ftd),
-        ]
-        check_call(cmd)
-
-
-def remove_zip(args):
-    cmd = [
-            "sudo",
-            "rm",
-            "/opt/rocm-{}/rocblas/lib/library/mllibrary.zip".format(args.rocmrelease)
-        ]
-    check_call(cmd)
-
-
 def copy(args):
-    shutil.copytree(f'/opt/rocm-{args.rocmrelease}/', os.environ['PREFIX'], symlinks=True, dirs_exist_ok=True)
+    rocm_path = f'/opt/rocm-{args.rocmrelease}'
+    for ef in extra_files:
+        for path in glob.glob(os.path.join(rocm_path, ef)):
+            delete_file(path)
+    shutil.copytree(rocm_path, os.environ['PREFIX'], symlinks=True, dirs_exist_ok=True)
 
 
 def install_rocm(args):
@@ -89,15 +70,20 @@ def install_rocm(args):
         
 
 def uninstall_rocm(args):
+    output = ""
     cmd = [
             "sudo",
             "amdgpu-uninstall",
             "-y",
             "--rocmrelease={}".format(args.rocmrelease),
         ]
-    output = check_output(cmd)
+    try:
+        output = check_output(cmd).decode()
+    except:
+        print('Error during ROCm uninstallation. Trying one more time')
+        output += check_output(cmd).decode()
     with open('rocm_uninstall.log', 'w') as f:
-        f.write(output.decode())
+        f.write(output)
         
         
 def make_parser():
@@ -111,9 +97,7 @@ def main():
     parser = make_parser()
     args = parser.parse_args()
     install_rocm(args)
-    archive_rocblas_binaries(args)
     copy(args)
-    remove_zip(args)
     patch_files(args)
     uninstall_rocm(args)
 
