@@ -36,9 +36,6 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - libgcc-ng
-    - libstdcxx-ng
-    - libstdcxx-devel_linux-64
     - python
     - git
     - patch
@@ -69,7 +66,6 @@ requirements:
   run:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - _openmp_mutex
     - python
     - numpy
     - cffi
@@ -86,9 +82,6 @@ requirements:
     - leveldb
     - pyyaml
     - mkl
-    - libgfortran-ng
-    - libstdcxx-ng
-    - libgcc-ng
     - rocm-hip-runtime
     - rocm-ml-libraries
     - rocm-dev
