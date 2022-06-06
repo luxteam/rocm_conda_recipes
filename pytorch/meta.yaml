@@ -34,8 +34,6 @@ test:
     - torch
 requirements:
   build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
     - python
     - git
     - patch
@@ -64,8 +62,6 @@ requirements:
     - rocm-ml-libraries
 
   run:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
     - python
     - numpy
     - cffi

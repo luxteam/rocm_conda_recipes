@@ -7,6 +7,9 @@ export ROCM_PATH=$BUILD_PREFIX
 export ROCM_SOURCE_DIR=$BUILD_PREFIX
 export USE_NINJA=0
 
+which gcc
+gcc --version
+
 rm -rf build
 python3 tools/amd_build/build_amd.py
 python3 setup.py install
