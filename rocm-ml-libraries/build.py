@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from argparse import ArgumentParser
 from subprocess import check_output
-import shutil
+from distutils.dir_util import copy_tree
 import glob
 
 
@@ -52,7 +52,7 @@ def copy(args):
     for ef in extra_files:
         for path in glob.glob(os.path.join(rocm_path, ef)):
             delete_file(path)
-    shutil.copytree(rocm_path, os.environ['PREFIX'], symlinks=True, dirs_exist_ok=True)
+    copy_tree(rocm_path, os.environ['PREFIX'], preserve_symlinks=1)
 
 
 def install_rocm(args):

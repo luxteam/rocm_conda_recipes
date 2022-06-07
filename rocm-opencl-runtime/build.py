@@ -1,11 +1,11 @@
 import os
 from argparse import ArgumentParser
 from subprocess import check_output
-import shutil
+from distutils.dir_util import copy_tree
 
 
 def copy(args):
-    shutil.copytree(f'/opt/rocm-{args.rocmrelease}/', os.environ['PREFIX'], symlinks=True, dirs_exist_ok=True)
+    copy_tree(f'/opt/rocm-{args.rocmrelease}/', os.environ['PREFIX'], preserve_symlinks=1)
 
 def install_rocm(args):
     cmd = [

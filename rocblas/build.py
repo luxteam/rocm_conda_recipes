@@ -1,7 +1,7 @@
 import os
 from argparse import ArgumentParser
 from subprocess import check_output, check_call
-import shutil
+from distutils.dir_util import copy_tree
 import glob
 
 files_to_delete = [
@@ -40,7 +40,7 @@ def copy(args):
             "/opt/rocm-{}/rocblas/lib/library/{}".format(args.rocmrelease, ftd),
         ]
         check_call(cmd)
-    shutil.copytree(f'/opt/rocm-{args.rocmrelease}/', os.environ['PREFIX'], symlinks=True, dirs_exist_ok=True)
+    copy_tree(f'/opt/rocm-{args.rocmrelease}/', os.environ['PREFIX'], preserve_symlinks=1)
     cmd = [
             "sudo",
             "rm",
