@@ -42,8 +42,8 @@ requirements:
     - numpy
     - ninja
     - pyyaml
-    - mkl
-    - mkl-include
+    - mkl <2022
+    - mkl-include <2022
     - setuptools
     - cmake
     - make
