@@ -77,7 +77,8 @@ requirements:
     - lmdb
     - leveldb
     - pyyaml
-    - mkl
+    - mkl <2022
+    - mkl-include <2022
     - rocm-hip-runtime
     - rocm-ml-libraries
     - rocm-dev
