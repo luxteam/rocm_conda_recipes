@@ -1,0 +1,13 @@
+{% set version = environ.get('CONDA_ROCM_VERSION', '5.1.0') %}
+package:
+  name: rocm
+  version: {{ version }}
+requirements:
+  run:
+    - rocm-dev={{ version }}
+    - rocm-hip-runtime={{ version }}
+    - rocm-hip-sdk={{ version }}
+    - rocm-language-runtime={{ version }}
+    - rocm-ml-libraries={{ version }}
+    - rocm-opencl-runtime={{ version }}
+    - rocm-opencl-sdk={{ version }}
