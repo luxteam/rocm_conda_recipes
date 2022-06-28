@@ -3,7 +3,10 @@ package:
   name: rocm
   version: {{ version }}
 requirements:
+  build:
+    - python
   run:
+    - python
     - rocm-dev={{ version }}
     - rocm-hip-runtime={{ version }}
     - rocm-hip-sdk={{ version }}
