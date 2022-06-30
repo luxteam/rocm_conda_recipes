@@ -12,9 +12,15 @@ requirements:
     - make
     - libstdcxx-ng
     - libgcc-ng
+    - libgfortran-ng
+    - mkl <2022
+    - mkl-include <2022
     - rocm-dev
+    - rocm-hip-sdk
   run:
     - python
     - libstdcxx-ng
     - libgcc-ng
+    - mkl <2022
+    - mkl-include <2022
     - rocm-dev
