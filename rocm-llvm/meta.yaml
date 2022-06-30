@@ -16,6 +16,7 @@ build:
   string: +{{ string_a }}_py{{ CONDA_PY }}{{ string_b }}_{{ PKG_BUILDNUM }}
 {% else %}
   string: py{{ CONDA_PY }}{{ string_b }}_{{ PKG_BUILDNUM }}
+{% endif %}
   script: |
     python build.py --rocmrelease={{ version }}
 requirements:
