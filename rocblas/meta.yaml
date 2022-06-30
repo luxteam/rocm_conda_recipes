@@ -1,10 +1,21 @@
 {% set version = environ.get('CONDA_ROCM_VERSION', '5.1.0') %}
+{% set string_a = environ.get('PACKAGES_BUILD_STRING_A', '') %}
+{% set string_b = environ.get('PACKAGES_BUILD_STRING_B', '') %}
+{% if string_b != '' %}
+  {% set string_b = '_' + string_b %}
+{% endif %}
+
 package:
   name: rocblas
   version: {{ version }}
 source:
   path: .
 build:
+  number: 0
+{% if string_a != '' %}
+  string: +{{ string_a }}_py{{ CONDA_PY }}{{ string_b }}_{{ PKG_BUILDNUM }}
+{% else %}
+  string: py{{ CONDA_PY }}{{ string_b }}_{{ PKG_BUILDNUM }}
   missing_dso_whitelist:
     - $RPATH/librt.so.1
     - $RPATH/libdl.so.2
