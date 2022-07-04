@@ -1,5 +1,6 @@
 export HIPDIR=$BUILD_PREFIX/hip
 export ARCH=ar
+pushd magma
 cp make.inc-examples/make.inc.hip-gcc-mkl make.inc
 echo 'LIBDIR += -L$(MKLROOT)/lib' >> make.inc
 echo 'LIB += -Wl,--enable-new-dtags -Wl,--rpath,$BUILD_PREFIX/lib -Wl,--rpath,$(MKLROOT)/lib -Wl,--rpath,$BUILD_PREFIX/magma/lib' >> make.inc
@@ -17,3 +18,5 @@ sed -i 's/^FOPENMP/#FOPENMP/g' make.inc
 make -f make.gen.hipMAGMA -j $(nproc)
 LANG=C.UTF-8 make lib/libmagma.so -j $(nproc) MKLROOT=$BUILD_PREFIX
 make testing/testing_dgemm -j $(nproc) MKLROOT=$BUILD_PREFIX
+popd
+cp -r magma $PREFIX/magma
