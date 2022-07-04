@@ -15,5 +15,5 @@ done
 # hipcc with openmp flag may cause isnan() on __device__ not to be found; depending on context, compiler may attempt to match with host definition
 sed -i 's/^FOPENMP/#FOPENMP/g' make.inc
 make -f make.gen.hipMAGMA -j $(nproc)
-LANG=C.UTF-8 make lib/libmagma.so -j $(nproc) MKLROOT=$PREFIX
-make testing/testing_dgemm -j $(nproc) MKLROOT=$PREFIX
+LANG=C.UTF-8 make lib/libmagma.so -j $(nproc) MKLROOT=$BUILD_PREFIX
+make testing/testing_dgemm -j $(nproc) MKLROOT=$BUILD_PREFIX
