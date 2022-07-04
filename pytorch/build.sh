@@ -7,6 +7,7 @@ export ROCM_PATH=$BUILD_PREFIX
 export ROCM_SOURCE_DIR=$BUILD_PREFIX
 export USE_NINJA=0
 export USE_ROCM=1
+export USE_MAGMA=1
 
 which gcc
 gcc --version

@@ -1,0 +1,28 @@
+{% set version = "2.6.2" %}
+{% set commit = "5959b8783e45f1809812ed96ae762f38ee701972" %}
+package:
+  name: magma
+  version: {{ version }}
+source:
+  git_url: https://bitbucket.org/icl/magma.git
+  git_rev: 5959b8783e45f1809812ed96ae762f38ee701972
+  folder: magma
+requirements:
+  build:
+    - python
+    - make
+    - libstdcxx-ng
+    - libgcc-ng
+    - libgfortran-ng
+    - mkl <2022
+    - mkl-include <2022
+    - rocm-dev
+    - rocm-hip-sdk
+  run:
+    - python
+    - libstdcxx-ng
+    - libgcc-ng
+    - mkl <2022
+    - mkl-include <2022
+    - rocm-dev
+    - rocm-hip-sdk

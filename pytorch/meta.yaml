@@ -42,6 +42,7 @@ build:
     - ROCTRACER_INCLUDE_DIR
     - USE_ROCM
     - USE_NINJA
+    - USE_MAGMA
   missing_dso_whitelist:
     - $RPATH/libtorch.so
     - $RPATH/libtorch_cpu.so
@@ -84,6 +85,7 @@ requirements:
     - rocm-dev =={{ conda_rocm_version }}
     - rocm-hip-sdk =={{ conda_rocm_version }}
     - rocm-ml-libraries =={{ conda_rocm_version }}
+    - magma
 
   run:
     - python
@@ -106,3 +108,4 @@ requirements:
     - rocm-hip-runtime =={{ conda_rocm_version }}
     - rocm-ml-libraries =={{ conda_rocm_version }}
     - rocm-dev =={{ conda_rocm_version }}
+    - magma
