@@ -46,4 +46,4 @@ requirements:
     - libstdcxx-ng
     - libgcc-ng
     - python
-    - rocm-llvm
+    - rocm-llvm =={{ version }}
