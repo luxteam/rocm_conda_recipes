@@ -9,7 +9,6 @@ source:
   folder: magma
 requirements:
   build:
-    - python
     - make
     - libstdcxx-ng
     - libgcc-ng
@@ -19,7 +18,6 @@ requirements:
     - rocm-dev
     - rocm-hip-sdk
   run:
-    - python
     - libstdcxx-ng
     - libgcc-ng
     - mkl <2022
