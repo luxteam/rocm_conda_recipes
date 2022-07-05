@@ -68,7 +68,7 @@ requirements:
     - pyyaml
     - mkl <2022
     - mkl-include <2022
-    - ncurses <6
+    - ncurses
     - setuptools
     - cmake
     - make
