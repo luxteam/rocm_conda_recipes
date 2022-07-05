@@ -1,7 +1,7 @@
 {% set conda_rocm_version = environ.get('CONDA_ROCM_VERSION', '5.1.0') %}
 {% set pytorch_commit_sha = environ.get('PYTORCH_COMMIT_SHA', '') %}
 {% set pytorch_branch = environ.get('PYTORCH_BRANCH', '') %}
-{% set version = environ.get('PYTORCH_VERSION', '1.0') %}
+{% set version = environ.get('PYTORCH_VERSION', '1.12') %}
 {% set string_a = environ.get('PACKAGES_BUILD_STRING_A', '') %}
 {% set string_b = environ.get('PACKAGES_BUILD_STRING_B', '') %}
 {% if string_b != '' %}
@@ -80,7 +80,6 @@ requirements:
     - dataclasses
     - numactl-cos6-x86_64
     - numactl-devel-cos6-x86_64
-    - elfutils
     - libdrm
     - rocm-dev =={{ conda_rocm_version }}
     - rocm-hip-sdk =={{ conda_rocm_version }}
