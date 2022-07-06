@@ -1,0 +1,18 @@
+diff --git a/apex/amp/_amp_state.py b/apex/amp/_amp_state.py
+index fd37b0f..8008eca 100644
+--- a/apex/amp/_amp_state.py
++++ b/apex/amp/_amp_state.py
+@@ -8,10 +8,10 @@ import torch
+ TORCH_MAJOR = int(torch.__version__.split('.')[0])
+ TORCH_MINOR = int(torch.__version__.split('.')[1])
+ 
+-if TORCH_MAJOR == 0:
+-    import collections.abc as container_abcs
+-else:
++if TORCH_MAJOR == 1 and TORCH_MINOR < 8:
+     from torch._six import container_abcs
++else:
++    import collections.abc as container_abcs
+ 
+ 
+ class AmpState(object):
