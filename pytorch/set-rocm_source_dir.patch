@@ -6,7 +6,7 @@ index 698c56a46a..a8ed04c82c 100644
  #cmake_policy(SET CMP0022 NEW)
  #cmake_policy(SET CMP0023 NEW)
  
-+set(ROCM_SOURCE_DIR "$ENV{BUILD_PREFIX}" CACHE STRING "ROCm source dir" FORCE)
++set(ROCM_SOURCE_DIR "$ENV{PREFIX}" CACHE STRING "ROCm source dir" FORCE)
 +mark_as_advanced(ROCM_SOURCE_DIR)
 +
  # Use compiler ID "AppleClang" instead of "Clang" for XCode.
