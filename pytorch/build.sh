@@ -9,6 +9,8 @@ export USE_NINJA=0
 export USE_ROCM=1
 export USE_MAGMA=1
 
+which rocminfo
+rocminfo
 which gcc
 gcc --version
 
