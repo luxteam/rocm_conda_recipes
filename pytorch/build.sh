@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -ex
 
-export CMAKE_PREFIX_PATH=$PREFIX
-export HIP_PATH=$PREFIX/hip
-export ROCM_PATH=$PREFIX
-export ROCM_SOURCE_DIR=$PREFIX
+export CMAKE_PREFIX_PATH=$CONDA_PREFIX
+export HIP_PATH=$CONDA_PREFIX/hip
+export ROCM_PATH=$CONDA_PREFIX
+export ROCM_SOURCE_DIR=$CONDA_PREFIX
 export USE_NINJA=0
 export USE_ROCM=1
 export USE_MAGMA=1
