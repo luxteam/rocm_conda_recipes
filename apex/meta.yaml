@@ -7,9 +7,9 @@ package:
   name: nvidia-apex
   version: {{ version }}
 source:
-{% if pytorch_commit_sha != '' %}
+{% if apex_commit_sha != '' %}
   url: https://github.com/NVIDIA/apex/archive/{{ apex_commit_sha }}.tar.gz
-{% elif pytorch_branch != '' %}
+{% elif apex_branch != '' %}
   url: https://github.com/NVIDIA/apex/archive/{{ apex_branch }}.tar.gz
 {% else %}
   git_url: https://github.com/NVIDIA/apex.git
@@ -35,7 +35,6 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-      host:
         - python
         - pytorch
         - setuptools
