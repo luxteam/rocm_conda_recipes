@@ -1,6 +1,5 @@
 {% set version = "0.14.0" %}
 {% set conda_rocm_version = environ.get('CONDA_ROCM_VERSION', '5.1.0') %}
-{% set commit = "369317f45354248582884f6e2f500b7cebea2236" %}
 {% set torchvision_commit_sha = environ.get('TORCHVISION_COMMIT_SHA', '') %}
 {% set torchvision_branch = environ.get('TORCHVISION_BRANCH', '') %}
 {% set torch_proc_type = "rocm" %}
