@@ -1,7 +1,13 @@
 {% set version = "0.1" %}
+{% set conda_rocm_version = environ.get('CONDA_ROCM_VERSION', '5.1.0') %}
 {% set apex_commit_sha = environ.get('APEX_COMMIT_SHA', '') %}
 {% set apex_branch = environ.get('APEX_BRANCH', '') %}
 {% set nvidia_apex_proc_type = "gpu" %}
+{% set string_a = environ.get('PACKAGES_BUILD_STRING_A', '') %}
+{% set string_b = environ.get('PACKAGES_BUILD_STRING_B', '') %}
+{% if string_b != '' %}
+  {% set string_b = '_' + string_b %}
+{% endif %}
 
 package:
   name: nvidia-apex
@@ -30,6 +36,15 @@ outputs:
   - name: nvidia-apex
     version: {{ version }}
     build:
+    {% if string_a != '' %}
+      string: +{{ string_a }}_py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }}
+    {% elif apex_commit_sha != '' %}
+      string: +git{{ apex_commit_sha }}_py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }}
+    {% elif apex_branch != '' %}
+      string: +dev{{ apex_branch }}_py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }}
+    {% else %}
+      string: py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }}
+    {% endif %}
       script: python -m pip install . -vv
     requirements:
       build:

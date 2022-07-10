@@ -1,15 +1,27 @@
 {% set version = "0.14.0" %}
+{% set conda_rocm_version = environ.get('CONDA_ROCM_VERSION', '5.1.0') %}
 {% set commit = "369317f45354248582884f6e2f500b7cebea2236" %}
 {% set torchvision_commit_sha = environ.get('TORCHVISION_COMMIT_SHA', '') %}
 {% set torchvision_branch = environ.get('TORCHVISION_BRANCH', '') %}
 {% set torch_proc_type = "rocm" %}
+{% set string_a = environ.get('PACKAGES_BUILD_STRING_A', '') %}
+{% set string_b = environ.get('PACKAGES_BUILD_STRING_B', '') %}
+{% if string_b != '' %}
+  {% set string_b = '_' + string_b %}
+{% endif %}
 
 package:
   name: torchvision-split
   version: {{ version }}
 
 source:
-  url: https://github.com/pytorch/vision/archive/{{ commit }}.tar.gz
+{% if torchvision_commit_sha != '' %}
+  url: https://github.com/pytorch/vision/archive/{{ torchvision_commit_sha }}.tar.gz
+{% elif torchvision_branch != '' %}
+  url: https://github.com/pytorch/vision/archive/{{ torchvision_branch }}.tar.gz
+{% else %}
+  git_url: https://github.com/pytorch/vision.git
+{% endif %}
 
 build:
   number: 1
@@ -27,7 +39,15 @@ outputs:
   - name: torchvision
     script: build-torch.sh
     build:
-      string: rocm
+      {% if string_a != '' %}
+      string: +{{ string_a }}_py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }}
+      {% elif torchvision_commit_sha != '' %}
+        string: +git{{ torchvision_commit_sha }}_py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }}
+      {% elif torchvision_branch != '' %}
+        string: +dev{{ torchvision_branch }}_py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }}
+      {% else %}
+        string: py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }}
+      {% endif %}
     requirements:
       build:
         - {{ compiler('c') }}
