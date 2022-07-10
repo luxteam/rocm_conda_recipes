@@ -1,0 +1,73 @@
+{% set version = "0.14.0" %}
+{% set commit = "369317f45354248582884f6e2f500b7cebea2236" %}
+{% set torchvision_commit_sha = environ.get('TORCHVISION_COMMIT_SHA', '') %}
+{% set torchvision_branch = environ.get('TORCHVISION_BRANCH', '') %}
+{% set torch_proc_type = "rocm" %}
+
+package:
+  name: torchvision-split
+  version: {{ version }}
+
+source:
+  url: https://github.com/pytorch/vision/archive/{{ commit }}.tar.gz
+
+build:
+  number: 1
+  script_env:
+    - USE_NINJA
+    - ROCM_HOME
+    - FORCE_CUDA
+    - TORCHVISION_INCLUDE
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+
+outputs:
+  - name: torchvision
+    script: build-torch.sh
+    build:
+      string: rocm
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+      host:
+        - python
+        # exclude 8.3.0 and 8.3.1 specifically due to pytorch/vision#4146, python-pillow/Pillow#5571
+        - pillow >=5.3.0,!=8.3.0,!=8.3.1 
+        - pip
+        - setuptools
+        - numpy
+        - requests
+        - jpeg
+        - libpng
+        - ffmpeg
+        - pytorch
+        - rocm-hip-sdk
+        - rocm-dev
+        - rocm-ml-libraries
+      run:
+        - python
+        - {{ pin_compatible('numpy') }}
+        - pillow >=5.3.0,!=8.3.0,!=8.3.1
+        - requests
+        - jpeg
+        - libpng
+        - ffmpeg
+        - pytorch
+        - rocm-dev
+
+    test:
+      requires:
+        - pytest
+        - requests
+        - scipy
+        - jpeg
+        - ca-certificates
+      imports:
+        - torchvision
+        - torchvision.datasets
+        - torchvision.models
+        - torchvision.transforms
+        - torchvision.utils
