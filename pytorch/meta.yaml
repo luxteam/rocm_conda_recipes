@@ -79,8 +79,6 @@ requirements:
     - six
     - requests
     - dataclasses
-    - numactl-cos6-x86_64
-    - numactl-devel-cos6-x86_64
     - libdrm
     - rocm-dev =={{ conda_rocm_version }}
     - rocm-hip-sdk =={{ conda_rocm_version }}
@@ -97,8 +95,6 @@ requirements:
     - pillow
     - typing_extensions
     - networkx
-    - numactl-cos6-x86_64
-    - numactl-devel-cos6-x86_64
     - scipy
     - lmdb
     - leveldb
