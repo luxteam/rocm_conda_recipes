@@ -1,4 +1,4 @@
-{% set version = "0.14.0" %}
+{% set version = environ.get('TORCHVISION_VERSION', '0.14.0') %}
 {% set conda_rocm_version = environ.get('CONDA_ROCM_VERSION', '5.1.0') %}
 {% set torchvision_commit_sha = environ.get('TORCHVISION_COMMIT_SHA', '') %}
 {% set torchvision_branch = environ.get('TORCHVISION_BRANCH', '') %}
