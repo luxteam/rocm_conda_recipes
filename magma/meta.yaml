@@ -1,12 +1,24 @@
 {% set version = "2.6.2" %}
 {% set commit = "5959b8783e45f1809812ed96ae762f38ee701972" %}
+{% set string_a = environ.get('PACKAGES_BUILD_STRING_A', '') %}
+{% set string_b = environ.get('PACKAGES_BUILD_STRING_B', '') %}
+{% if string_b != '' and string_a != '' %}
+  {% set string_b = '_' + string_b %}
+{% endif %}
+
 package:
   name: magma
   version: {{ version }}
 source:
   git_url: https://bitbucket.org/icl/magma.git
-  git_rev: 5959b8783e45f1809812ed96ae762f38ee701972
+  git_rev: {{ commit }}
   folder: magma
+build:
+{% if string_a != '' %}
+  string: +{{ string_a }}{{ string_b }}_{{ PKG_BUILDNUM }}
+{% elif string_b != '' %}
+  string: {{ string_b }}_{{ PKG_BUILDNUM }}
+{% endif %}
 requirements:
   build:
     - make

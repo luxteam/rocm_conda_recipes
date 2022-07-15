@@ -20,10 +20,14 @@ source:
 {% else %}
   git_url: https://github.com/ROCmSoftwarePlatform/apex.git
 {% endif %}
-  sha256: cc5ce27aa30b5ade54d520fafc1cd7d293dfba58c51851759a034d03e3f370bb
 build:
   number: 0
   skip: True  # [osx or win]
+{% if string_a != '' %}
+  string: +{{ string_a }}_py{{ CONDA_PY }}{{ string_b }}_{{ PKG_BUILDNUM }}
+{% else %}
+  string: py{{ CONDA_PY }}{{ string_b }}_{{ PKG_BUILDNUM }}
+{% endif %}
 outputs:
   - name: apex-proc
     version: {{ version }}
