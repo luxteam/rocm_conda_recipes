@@ -2,7 +2,7 @@
 {% set conda_rocm_version = environ.get('CONDA_ROCM_VERSION', '5.1.0') %}
 {% set apex_commit_sha = environ.get('APEX_COMMIT_SHA', '') %}
 {% set apex_branch = environ.get('APEX_BRANCH', '') %}
-{% set nvidia_apex_proc_type = "gpu" %}
+{% set apex_proc_type = "gpu" %}
 {% set string_a = environ.get('PACKAGES_BUILD_STRING_A', '') %}
 {% set string_b = environ.get('PACKAGES_BUILD_STRING_B', '') %}
 {% if string_b != '' %}
@@ -10,46 +10,38 @@
 {% endif %}
 
 package:
-  name: nvidia-apex
+  name: apex
   version: {{ version }}
 source:
 {% if apex_commit_sha != '' %}
-  url: https://github.com/NVIDIA/apex/archive/{{ apex_commit_sha }}.tar.gz
+  url: https://github.com/ROCmSoftwarePlatform/apex/archive/{{ apex_commit_sha }}.tar.gz
 {% elif apex_branch != '' %}
-  url: https://github.com/NVIDIA/apex/archive/{{ apex_branch }}.tar.gz
+  url: https://github.com/ROCmSoftwarePlatform/apex/archive/{{ apex_branch }}.tar.gz
 {% else %}
-  git_url: https://github.com/NVIDIA/apex.git
+  git_url: https://github.com/ROCmSoftwarePlatform/apex.git
 {% endif %}
   sha256: cc5ce27aa30b5ade54d520fafc1cd7d293dfba58c51851759a034d03e3f370bb
 build:
   number: 0
   skip: True  # [osx or win]
 outputs:
-  - name: nvidia-apex-proc
+  - name: apex-proc
     version: {{ version }}
     build:
-      string: "{{ nvidia_apex_proc_type }}"
+      string: "{{ apex_proc_type }}"
     test:
       commands:
         - exit 0
 
-  - name: nvidia-apex
+  - name: apex
     version: {{ version }}
     build:
-    {% if string_a != '' %}
-      string: +{{ string_a }}_py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }}
-    {% elif apex_commit_sha != '' %}
-      string: +git{{ apex_commit_sha }}_py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }}
-    {% elif apex_branch != '' %}
-      string: +dev{{ apex_branch }}_py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }}
-    {% else %}
-      string: py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }}
-    {% endif %}
       script: python -m pip install . -vv
     requirements:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
+      host:
         - python
         - pytorch
         - setuptools
@@ -63,7 +55,7 @@ outputs:
         - PyYAML
         - pytest
       run_constrained:
-        - nvidia-apex-proc * {{ nvidia_apex_proc_type }}
+        - apex-proc * {{ apex_proc_type }}
         - pytorch
     test:
       imports:
