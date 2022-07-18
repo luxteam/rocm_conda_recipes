@@ -20,17 +20,21 @@ source:
   git_url: https://github.com/ROCmSoftwarePlatform/pytorch.git
 {% endif %}
   patches:
-    - set-rocm_source_dir.patch
+    - set-rocm_source_dir.patch # [rocm_compiler != "None"]
 build:
   number: 0
 {% if string_a != '' %}
-  string: +{{ string_a }}_py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }}
+  string: +{{ string_a }}_py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }} # [rocm_compiler != "None"]
+  string: +{{ string_a }}_py{{ CONDA_PY }}_cpu{{ string_b }}_{{ PKG_BUILDNUM }} # [rocm_compiler == "None"]
 {% elif pytorch_commit_sha != '' %}
-  string: +git{{ pytorch_commit_sha }}_py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }}
+  string: +git{{ pytorch_commit_sha }}_py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }} # [rocm_compiler != "None"]
+  string: +git{{ pytorch_commit_sha }}_py{{ CONDA_PY }}_cpu{{ string_b }}_{{ PKG_BUILDNUM }} # [rocm_compiler == "None"]
 {% elif pytorch_branch != '' %}
-  string: +dev{{ pytorch_branch }}_py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }}
+  string: +dev{{ pytorch_branch }}_py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }} # [rocm_compiler != "None"]
+  string: +dev{{ pytorch_branch }}_py{{ CONDA_PY }}_cpu{{ string_b }}_{{ PKG_BUILDNUM }} # [rocm_compiler == "None"]
 {% else %}
-  string: py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }}
+  string: py{{ CONDA_PY }}_rocm{{ conda_rocm_version }}{{ string_b }}_{{ PKG_BUILDNUM }} # [rocm_compiler != "None"]
+  string: py{{ CONDA_PY }}_cpu{{ string_b }}_{{ PKG_BUILDNUM }} # [rocm_compiler == "None"]
 {% endif %}
   script_env:
     - CMAKE_ARGS
@@ -52,8 +56,13 @@ build:
     - $RPATH/libjitbackend_test.so
     - $RPATH/libbackend_with_compiler.so
 test:
+{% if rocm_compiler != "None" %}
   files:
     - test
+    - run-torch.sh
+  commands:
+    - bash run-torch.sh
+{% endif %}
   imports:
     - torch
 requirements:
@@ -80,10 +89,10 @@ requirements:
     - requests
     - dataclasses
     - libdrm
-    - rocm-dev =={{ conda_rocm_version }}
-    - rocm-hip-sdk =={{ conda_rocm_version }}
-    - rocm-ml-libraries =={{ conda_rocm_version }}
-    - magma
+    - rocm-dev =={{ conda_rocm_version }}  # [rocm_compiler != "None"]
+    - rocm-hip-sdk =={{ conda_rocm_version }}  # [rocm_compiler != "None"]
+    - rocm-ml-libraries =={{ conda_rocm_version }}  # [rocm_compiler != "None"]
+    - magma  # [rocm_compiler != "None"]
 
   run:
     - python
@@ -101,7 +110,7 @@ requirements:
     - pyyaml
     - mkl <2022
     - mkl-include <2022
-    - rocm-hip-runtime =={{ conda_rocm_version }}
-    - rocm-ml-libraries =={{ conda_rocm_version }}
-    - rocm-dev =={{ conda_rocm_version }}
-    - magma
+    - rocm-hip-runtime =={{ conda_rocm_version }}  # [rocm_compiler != "None"]
+    - rocm-ml-libraries =={{ conda_rocm_version }}  # [rocm_compiler != "None"]
+    - rocm-dev =={{ conda_rocm_version }}  # [rocm_compiler != "None"]
+    - magma  # [rocm_compiler != "None"]
