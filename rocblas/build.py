@@ -2,6 +2,7 @@ import os
 from argparse import ArgumentParser
 from subprocess import check_output, check_call
 from distutils.dir_util import copy_tree
+from packaging import version
 import glob
 
 files_to_delete = [
@@ -17,34 +18,45 @@ files_to_delete = [
     'Kernels.so-000-gfx90a-xnack-.hsaco',
     'TensileLibrary.dat',
     'TensileLibrary_gfx1030.co',
+    'TensileLibrary_gfx1030.dat',
     'TensileLibrary_gfx803.co',
+    'TensileLibrary_gfx803.dat',
     'TensileLibrary_gfx900.co',
+    'TensileLibrary_gfx900.dat',
     'TensileLibrary_gfx906.co',
+    'TensileLibrary_gfx906.dat',
     'TensileLibrary_gfx908.co',
+    'TensileLibrary_gfx908.dat',
     'TensileLibrary_gfx90a.co',
+    'TensileLibrary_gfx90a.dat',
 ]
 
 def copy(args):
+    if version.parse(args.rocmrelease) >= version.parse("5.2"):
+        rocblas_library_path = "lib/rocblas/library"
+    else:
+        rocblas_library_path = "rocblas/lib/library"
     cmd = [
             "sudo",
             "zip",
             "-rj",
-            "/opt/rocm-{}/rocblas/lib/library/library.zip".format(args.rocmrelease),
-            "/opt/rocm-{}/rocblas/lib/library".format(args.rocmrelease),
+            "/opt/rocm-{}/{}/library.zip".format(args.rocmrelease, rocblas_library_path),
+            "/opt/rocm-{}/{}".format(args.rocmrelease, rocblas_library_path),
         ]
     check_call(cmd)
     for ftd in files_to_delete:
         cmd = [
             "sudo",
             "rm",
-            "/opt/rocm-{}/rocblas/lib/library/{}".format(args.rocmrelease, ftd),
+            "-f",
+            "/opt/rocm-{}/{}/{}".format(args.rocmrelease, rocblas_library_path, ftd),
         ]
         check_call(cmd)
     copy_tree(f'/opt/rocm-{args.rocmrelease}/', os.environ['PREFIX'], preserve_symlinks=1)
     cmd = [
             "sudo",
             "rm",
-            "/opt/rocm-{}/rocblas/lib/library/library.zip".format(args.rocmrelease)
+            "/opt/rocm-{}/{}/library.zip".format(args.rocmrelease, rocblas_library_path)
         ]
     check_call(cmd)
 

@@ -35,6 +35,7 @@ build:
 requirements:
   build:
     - python
+    - packaging
     - libstdcxx-ng
     - libgcc-ng
     - zlib
