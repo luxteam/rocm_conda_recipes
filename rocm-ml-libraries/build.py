@@ -3,15 +3,20 @@ from pathlib import Path
 from argparse import ArgumentParser
 from subprocess import check_output
 from distutils.dir_util import copy_tree
+from packaging import version
 import glob
 
 
-files_to_patch = [
-    {
-        'file': os.path.join('hipfft', 'lib', 'cmake', 'hipfft', 'hipfft-targets.cmake'),
+files_to_patch = {
+    '>=5.2': {
+        'file': os.path.join('hipfft', 'lib', 'cmake', 'hipfft-targets.cmake'),
         'changes': [('/opt/rocm-{version}', '${_IMPORT_PREFIX}')]
     },
-]
+    'default': {
+        'file': os.path.join('hipfft', 'lib', 'cmake', 'hipfft', 'hipfft-targets.cmake'),
+        'changes': [('/opt/rocm-{version}', '${_IMPORT_PREFIX}')]
+    }
+}
 
 extra_files = [
     'llvm',
@@ -39,7 +44,12 @@ def delete_file(path):
     
 
 def patch_files(args):
-    for info in files_to_patch:
+    if version.parse(args.rocmrelease) >= version.parse("5.2"):
+        ftp = files_to_patch['>=5.2']
+    else:
+        ftp = files_to_patch['default']
+        
+    for info in ftp:
         p = Path(os.environ['PREFIX'], info['file']).resolve()
         filedata = p.read_text()
         for change in info['changes']:

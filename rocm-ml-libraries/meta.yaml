@@ -41,6 +41,7 @@ requirements:
     - libstdcxx-ng
     - libgcc-ng
     - python
+    - packaging
     - zlib
   run:
     - libstdcxx-ng
