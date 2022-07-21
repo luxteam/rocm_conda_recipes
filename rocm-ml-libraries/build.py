@@ -7,34 +7,47 @@ from packaging import version
 import glob
 
 
-files_to_patch = {
-    '>=5.2': [
-        {
-            'file': os.path.join('hipfft', 'lib', 'cmake', 'hipfft-targets.cmake'),
-            'changes': [('/opt/rocm-{version}', '${_IMPORT_PREFIX}')]
-        }
-    ],
-    'default': [
-        {
-            'file': os.path.join('hipfft', 'lib', 'cmake', 'hipfft', 'hipfft-targets.cmake'),
-            'changes': [('/opt/rocm-{version}', '${_IMPORT_PREFIX}')]
-        }
-    ]
+config = {
+    '>=5.2': {
+        'files_to_patch': [
+            {
+                'file': os.path.join('hipfft', 'lib', 'cmake', 'hipfft-targets.cmake'),
+                'changes': [('/opt/rocm-{version}', '${_IMPORT_PREFIX}')]
+            }
+        ],
+        'extra_files': [
+            'llvm',
+            'share/doc/rocm-llvm',
+            'share/doc/rocblas',
+            'bin/amdclang*',
+            'bin/amdflang',
+            'bin/amdlld',
+            'lib/librocblas.so.0*',
+            'lib/rocblas/library',
+        ]
+    },
+    'default': {
+        'files_to_patch': [
+            {
+                'file': os.path.join('hipfft', 'lib', 'cmake', 'hipfft', 'hipfft-targets.cmake'),
+                'changes': [('/opt/rocm-{version}', '${_IMPORT_PREFIX}')]
+            }
+        ],
+        'extra_files': [
+            'llvm',
+            'rocblas/lib/library',
+            'rocblas/lib/librocblas.so.0*',
+            'share/doc/rocm-llvm',
+            'share/doc/rocblas',
+            'bin/amdclang*',
+            'bin/amdflang',
+            'bin/amdlld',
+            'lib/librocblas.so.0*',
+            'lib/library/Kernels.so*',
+            'lib/library/Tensile*'
+        ]
+    }
 }
-
-extra_files = [
-    'llvm',
-    'rocblas/lib/library',
-    'rocblas/lib/librocblas.so.0*',
-    'share/doc/rocm-llvm',
-    'share/doc/rocblas'
-    'bin/amdclang*',
-    'bin/amdflang',
-    'bin/amdlld',
-    'lib/librocblas.so.0*',
-    'lib/library/Kernels.so*',
-    'lib/library/Tensile*'
-]
 
 
 def delete_file(path):
@@ -47,29 +60,26 @@ def delete_file(path):
     print(check_output(cmd))
     
 
-def patch_files(args):
-    if version.parse(args.rocmrelease) >= version.parse("5.2"):
-        ftp = files_to_patch['>=5.2']
-    else:
-        ftp = files_to_patch['default']
-        
-    for info in ftp:
-        p = Path(os.environ['PREFIX'], info['file']).resolve()
-        filedata = p.read_text()
-        for change in info['changes']:
-            filedata = filedata.replace(change[0].format(version=args.rocmrelease), change[1])
-        p.write_text(filedata)
+def patch_files(args, cfg):
+    if cfg.get('files_to_patch'):
+        for info in cfg['files_to_patch']:
+            p = Path(os.environ['PREFIX'], info['file']).resolve()
+            filedata = p.read_text()
+            for change in info['changes']:
+                filedata = filedata.replace(change[0].format(version=args.rocmrelease), change[1])
+            p.write_text(filedata)
 
 
-def copy(args):
+def copy(args, cfg):
     rocm_path = f'/opt/rocm-{args.rocmrelease}'
-    for ef in extra_files:
-        for path in glob.glob(os.path.join(rocm_path, ef)):
-            delete_file(path)
+    if cfg.get('extra_files'):
+        for ef in cfg['extra_files']:
+            for path in glob.glob(os.path.join(rocm_path, ef)):
+                delete_file(path)
     copy_tree(rocm_path, os.environ['PREFIX'], preserve_symlinks=1)
 
 
-def install_rocm(args):
+def install_rocm(args, cfg):
     cmd = [
             "sudo",
             "amdgpu-install",
@@ -83,7 +93,7 @@ def install_rocm(args):
         f.write(output.decode())
         
 
-def uninstall_rocm(args):
+def uninstall_rocm(args, cfg):
     output = ""
     cmd = [
             "sudo",
@@ -110,10 +120,14 @@ def main():
     print('Running build')
     parser = make_parser()
     args = parser.parse_args()
-    install_rocm(args)
-    copy(args)
-    patch_files(args)
-    uninstall_rocm(args)
+    if version.parse(args.rocmrelease) >= version.parse("5.2"):
+        cfg = config['>=5.2']
+    else:
+        cfg = config['default']
+    install_rocm(args, cfg)
+    copy(args, cfg)
+    patch_files(args, cfg)
+    uninstall_rocm(args, cfg)
 
 
 if __name__ == "__main__":
