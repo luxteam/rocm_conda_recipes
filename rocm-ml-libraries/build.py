@@ -8,14 +8,18 @@ import glob
 
 
 files_to_patch = {
-    '>=5.2': {
-        'file': os.path.join('hipfft', 'lib', 'cmake', 'hipfft-targets.cmake'),
-        'changes': [('/opt/rocm-{version}', '${_IMPORT_PREFIX}')]
-    },
-    'default': {
-        'file': os.path.join('hipfft', 'lib', 'cmake', 'hipfft', 'hipfft-targets.cmake'),
-        'changes': [('/opt/rocm-{version}', '${_IMPORT_PREFIX}')]
-    }
+    '>=5.2': [
+        {
+            'file': os.path.join('hipfft', 'lib', 'cmake', 'hipfft-targets.cmake'),
+            'changes': [('/opt/rocm-{version}', '${_IMPORT_PREFIX}')]
+        }
+    ],
+    'default': [
+        {
+            'file': os.path.join('hipfft', 'lib', 'cmake', 'hipfft', 'hipfft-targets.cmake'),
+            'changes': [('/opt/rocm-{version}', '${_IMPORT_PREFIX}')]
+        }
+    ]
 }
 
 extra_files = [
